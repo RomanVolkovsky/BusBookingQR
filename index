@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>QR Ticket</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #f5f5f5;
+        }
+
+        #qrcode {
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        textarea {
+            width: 420px;
+            height: 180px;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        button {
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>QR-код билета (Bus System)</h2>
+
+<textarea id="jsonInput">
+{
+  "BookingID": 10245,
+  "PNR": "PNR88991234",
+  "UserID": 501,
+  "RouteID": 12,
+  "BusID": 7,
+  "SeatNo": "A12",
+  "TravelDate": "2026-05-27",
+  "BoardingID": 3,
+  "Status": "PAID"
+}
+</textarea>
+
+<button onclick="generateQR()">Сгенерировать QR</button>
+
+<div id="qrcode"></div>
+
+<script>
+function generateQR() {
+    const container = document.getElementById("qrcode");
+    container.innerHTML = "";
+
+    const jsonText = document.getElementById("jsonInput").value;
+
+    try {
+        // проверка что это валидный JSON
+        const obj = JSON.parse(jsonText);
+
+        // обратно в строку (это и будет QR-данные)
+        const qrData = JSON.stringify(obj);
+
+        new QRCode(container, {
+            text: qrData,
+            width: 220,
+            height: 220
+        });
+
+    } catch (e) {
+        alert("Ошибка: некорректный JSON");
+    }
+}
+</script>
+
+</body>
+</html>
